@@ -1,0 +1,33 @@
+import django
+from django.db import models
+from django.contrib.auth.models import User
+
+class Referencias(models.Model):
+    arquivo = models.FileField(upload_to='referencias')
+
+    def __str__(self) -> str:
+        return self.arquivo.url
+
+class Jobs(models.Model):
+    categoria_choices = (('IN', 'Indefinido'),
+                         ('D', 'Design'),
+                         ('EV', 'Edição de Vídeo'))
+
+    status_choices = (('C', 'Em criação'),
+                      ('AA', 'Aguardando aprovação'),
+                      ('F', 'Finalizado'))
+
+    titulo = models.CharField(max_length=200)
+    descricao = models.TextField(blank=True)
+    categoria = models.CharField(max_length=2, choices=categoria_choices, default="IN")
+    prazo_entrega = models.DateField()
+    hora_entrega = models.TimeField(blank=True, default=django.utils.timezone.now)
+    preco = models.FloatField(default=00.00)
+    referencias = models.ManyToManyField(Referencias, blank=True)
+    profissional = models.ForeignKey(User, on_delete=models.DO_NOTHING, null=True, blank=True)
+    reservado = models.BooleanField(default=False)
+    status = models.CharField(max_length=2, choices=status_choices, default='C')
+    arquivo_final = models.FileField(null=True)
+
+    def __str__(self) -> str:
+        return self.titulo
