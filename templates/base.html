@@ -20,25 +20,38 @@
             font-size: 20px;
             font-weight: bold;
         }
+        .profile_avatar{
+          border:5px solid #555;
+          position:absolute;
+          right:2px;
+          top:7px;
+          margin: 0px 15px 15px 0px;
+        }
     </style>
+    <base href="http://localhost:8000/"/>
 </head> 
 <body class="fundo">
-    {% if user.is_authenticated %}
       <nav style="background-color: #444;" class="navbar navbar-expand-lg navbar-dark">
-        <a class="navbar-brand" href="#"><span class="font-degrade-nav">Jobs Online</span></a>
+        <a class="navbar-brand" href="" title="Dashboard"><span class="font-degrade-nav">Jobs Online</span></a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav">
             <li class="nav-item active">
-              <a class="nav-link" href="#">O seu guia para o freelance</a>
+              <a class="nav-link">O seu guia para o freelance</a>
             </li>
-            
+
           </ul>
         </div>
+        <div class="nav__inner"> 
+          <figure class="nav__avatar"> 
+            <a href="dashboard/perfil"><img class ="profile_avatar" src="static/jobs/img/user_avatar.png" title="Perfil" style="width:40px;height:40px;"></a>
+          </figure>
+          <br>
+          <a href="autenticacao/sair" style= "color: #000000; border-bottom: 1px dotted #EEEEEE; " title="Voltar para login">Logout</a>
+        </div>
       </nav>
-    {% endif %}
     {% block 'body' %}
     
     {% endblock %}

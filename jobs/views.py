@@ -2,13 +2,11 @@ from datetime import datetime
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.messages import constants
-from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 
-from .models import Jobs
+from .models import JobCategory, Jobs
 
-@login_required(login_url='/auth/login')
 def buscar_jobs(request):
     if request.method == "GET":
         preco_minimo = request.GET.get('preco_minimo')
@@ -32,25 +30,30 @@ def buscar_jobs(request):
             if not prazo_maximo:
                 prazo_maximo = datetime(year=3000, month=1, day=1)
 
-            categoria = [categoria, ]
             jobs = Jobs.objects.filter(preco__gte=preco_minimo)\
                 .filter(preco__lte=preco_maximo)\
                 .filter(prazo_entrega__gte=prazo_minimo)\
                 .filter(prazo_entrega__lte=prazo_maximo)\
-                .filter(categoria__in=categoria)\
                 .filter(reservado=False)
+
+            if categoria and categoria != '0':
+                jobs = jobs.filter(categoria=categoria)
         else:
             jobs = Jobs.objects.filter(reservado=False)
 
-        return render(request, 'find_jobs.html', {'jobs': jobs})
-@login_required(login_url='/auth/login')
+        return render(request, 'find_jobs.html', {'jobs': jobs, 'categories':JobCategory.objects.all()})
+
+
+@login_required(login_url='/autenticacao/login')
 def aceitar_job(request, id):
     job = Jobs.objects.get(id=id)
     job.profissional = request.user
     job.reservado = True
     job.save()
     return redirect(buscar_jobs)
-@login_required(login_url='/auth/login')
+
+
+@login_required(login_url='/autenticacao/login')
 def perfil(request):
     if request.method == "GET":
         jobs = Jobs.objects.filter(profissional=request.user)
@@ -66,13 +69,13 @@ def perfil(request):
 
         if usuario.exists():
             messages.add_message(request, constants.ERROR, 'Já existe um usuário cadastrado com esse nome')
-            return redirect('/jobs/perfil')
+            return redirect('/dashboard/perfil')
 
         usuario = User.objects.filter(email=email).exclude(id=request.user.id)
 
         if usuario.exists():
             messages.add_message(request, constants.ERROR, 'Já existe um usuário com esse e-mail')
-            return redirect('/jobs/perfil')
+            return redirect('/dashboard/perfil')
         
         request.user.username = username
         request.user.email = email
@@ -80,8 +83,10 @@ def perfil(request):
         request.user.last_name = ultimo_nome
         request.user.save()
         messages.add_message(request, constants.SUCCESS, 'Dados alterados com sucesso!')
-        return redirect('/jobs/find_jobs')
-@login_required(login_url='/auth/login')
+        return redirect('/dashboard/perfil')
+
+        
+@login_required(login_url='/autenticacao/login')
 def enviar_projeto(request):
     arquivo = request.FILES.get('file')
     id_job = request.POST.get('id')
@@ -91,4 +96,4 @@ def enviar_projeto(request):
     job.arquivo_final = arquivo
     job.status = 'AA'
     job.save()
-    return redirect('/jobs/perfil')
+    return redirect('/dashboard/perfil')

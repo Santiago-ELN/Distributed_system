@@ -23,8 +23,8 @@ from jobs import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', lambda req: redirect(views.buscar_jobs)),
-    path('auth/', include('user_auth.urls')),
-    path('jobs/', include('jobs.urls')),
+    path('autenticacao/', include('user_auth.urls')),
+    path('dashboard/', include('jobs.urls')),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
