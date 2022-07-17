@@ -5,7 +5,7 @@ from django.contrib.messages import constants
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 
-from .models import Jobs
+from .models import JobCategory, Jobs
 
 def buscar_jobs(request):
     if request.method == "GET":
@@ -30,17 +30,18 @@ def buscar_jobs(request):
             if not prazo_maximo:
                 prazo_maximo = datetime(year=3000, month=1, day=1)
 
-            categoria = [categoria, ]
             jobs = Jobs.objects.filter(preco__gte=preco_minimo)\
                 .filter(preco__lte=preco_maximo)\
                 .filter(prazo_entrega__gte=prazo_minimo)\
                 .filter(prazo_entrega__lte=prazo_maximo)\
-                .filter(categoria__in=categoria)\
                 .filter(reservado=False)
+
+            if categoria and categoria != '0':
+                jobs = jobs.filter(categoria=categoria)
         else:
             jobs = Jobs.objects.filter(reservado=False)
 
-        return render(request, 'find_jobs.html', {'jobs': jobs})
+        return render(request, 'find_jobs.html', {'jobs': jobs, 'categories':JobCategory.objects.all()})
 
 
 @login_required(login_url='/autenticacao/login')
@@ -82,7 +83,7 @@ def perfil(request):
         request.user.last_name = ultimo_nome
         request.user.save()
         messages.add_message(request, constants.SUCCESS, 'Dados alterados com sucesso!')
-        return redirect('/dashboard/find_jobs')
+        return redirect('/dashboard/perfil')
 
         
 @login_required(login_url='/autenticacao/login')
