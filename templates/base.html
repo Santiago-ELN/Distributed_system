@@ -1,3 +1,5 @@
+{% load static %}
+
 <!doctype html>
 <html lang="en">
     <head>
@@ -46,7 +48,10 @@
         </div>
         <div class="nav__inner"> 
           <figure class="nav__avatar"> 
+            <!--
             <a href="dashboard/perfil"><img class ="profile_avatar" src="static/jobs/img/user_avatar.png" title="Perfil" style="width:40px;height:40px;"></a>
+            -->
+            <a href="dashboard/perfil"><img class ="profile_avatar" src="/media/referencias/user_avatar.png" title="Perfil" style="width:40px;height:40px;"></a>
           </figure>
           <br>
           <a href="autenticacao/sair" style= "color: #000000; border-bottom: 1px dotted #EEEEEE; " title="Voltar para login">Logout</a>
