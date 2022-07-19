@@ -55,4 +55,4 @@ venv/
 
 # Local Database
 db.sqlite3
-media/*
+#media/*
