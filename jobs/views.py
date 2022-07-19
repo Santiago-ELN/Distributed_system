@@ -44,6 +44,7 @@ def buscar_jobs(request):
         return render(request, 'find_jobs.html', {'jobs': jobs, 'categories':JobCategory.objects.all()})
 
 
+
 @login_required(login_url='/autenticacao/login')
 def aceitar_job(request, id):
     job = Jobs.objects.get(id=id)
@@ -83,6 +84,7 @@ def perfil(request):
         request.user.last_name = ultimo_nome
         request.user.save()
         messages.add_message(request, constants.SUCCESS, 'Dados alterados com sucesso!')
+
         return redirect('/dashboard/perfil')
 
         
