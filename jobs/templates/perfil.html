@@ -9,6 +9,8 @@
 
 
 {% block 'body' %}
+</body>
+</html>
     <br>
     <br>
     <div class="container">
@@ -54,17 +56,10 @@
             <tbody>
                 {% for job in jobs %}
                     <tr>
-                        <th scope="row"><img width="100px" src="{{job.referencias.all.0}}"></th>
+                        <th scope="row"><img width="100px" src="media/{{job.referencias.all.0.arquivo}}"></th>
                         <td>{{job.titulo}}</td>
-                        <td>{% if job.categoria == 'D'%}
-                                Design
-                            {% elif job.categoria == 'EV' %}
-                                Edição de vídeo
-                            {% else %}
-                                Indefinido
-                            {% endif%}
-                        </td>
-                        <td>{{job.descrição}}</td>
+                        <td>{{job.categoria.name}}</td>
+                        <td>{{job.descricao}}</td>
                         <td>
                             {% if job.status == 'AA'%}
                             <span class="badge badge-info">Aguardando aprovação</span>
