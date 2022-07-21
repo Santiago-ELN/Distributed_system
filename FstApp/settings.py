@@ -121,7 +121,7 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = (os.path.join(BASE_DIR, 'templates/static'),)
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
-DASHBOARD_URL = '177.191.232.38:8000'
+DASHBOARD_URL = '192.168.1.2:8000'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
